@@ -12,10 +12,7 @@ export default function Loader() {
         className="w-32 h-32 object-contain mb-6"
       />
 
-      {/* Optional text */}
-      <p className="text-[#bfa37c] tracking-widest font-semibold text-lg animate-pulse">
-        Loading...
-      </p>
+      
     </div>
   );
 }
