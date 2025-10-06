@@ -54,12 +54,12 @@ function App() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const handleLoad = () => setLoading(false);
+    // Simulate a 5-second loading time
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 5000);
 
-    // Wait for all assets (images, videos, etc.) to load
-    window.addEventListener("load", handleLoad);
-
-    return () => window.removeEventListener("load", handleLoad);
+    return () => clearTimeout(timer);
   }, []);
 
   if (loading) return <Loader />; 
