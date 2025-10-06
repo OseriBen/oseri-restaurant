@@ -1,29 +1,57 @@
-import React from "react";
-
-import bgImage from "../assets/bg-table.jpg"; 
+import React, { useRef } from "react";
+import { motion, useInView } from "framer-motion";
+import bgImage from "../assets/bg-table.jpg";
 
 export default function BookTable() {
+  const sectionRef = useRef(null);
+  const isInView = useInView(sectionRef, { once: false, amount: 0.3 });
+
   return (
     <section
+      ref={sectionRef}
       id="contact"
       className="relative bg-cover bg-center bg-fixed"
       style={{ backgroundImage: `url(${bgImage})` }}
     >
-      {/* Dark overlay (covers whole section) */}
+      {/* Dark overlay */}
       <div className="absolute inset-0 bg-black/40"></div>
 
       {/* Content wrapper */}
       <div className="relative z-10 flex flex-col items-center px-6">
         {/* Reservation Form Section */}
-        <div className="min-h-[100svh] flex flex-col justify-center items-center py-16 w-full">
+        <motion.div
+          className="min-h-[100svh] flex flex-col justify-center items-center py-16 w-full"
+          initial={{ opacity: 0, y: 80 }}
+          animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 80 }}
+          transition={{ duration: 1, ease: "easeOut" }}
+        >
           <div className="text-center mb-10">
-            <h3 className="text-xl italic text-orange-300 mb-2">Reservations</h3>
-            <h2 className="text-4xl font-bold tracking-wide text-white drop-shadow-lg">
+            <motion.h3
+              className="text-xl italic text-orange-300 mb-2"
+              initial={{ opacity: 0, y: 30 }}
+              animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+            >
+              Reservations
+            </motion.h3>
+
+            <motion.h2
+              className="text-4xl font-bold tracking-wide text-white drop-shadow-lg"
+              initial={{ opacity: 0, y: 40 }}
+              animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 40 }}
+              transition={{ duration: 0.9, delay: 0.4 }}
+            >
               BOOK A TABLE
-            </h2>
+            </motion.h2>
           </div>
 
-          <form className="space-y-6 w-full max-w-xl text-white">
+          {/* Form */}
+          <motion.form
+            className="space-y-6 w-full max-w-xl text-white"
+            initial={{ opacity: 0, y: 50 }}
+            animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
+            transition={{ duration: 1, delay: 0.6 }}
+          >
             <input
               type="text"
               placeholder="Name"
@@ -54,11 +82,16 @@ export default function BookTable() {
             >
               BOOK A TABLE
             </button>
-          </form>
-        </div>
+          </motion.form>
+        </motion.div>
 
-        
-        <div className="text-gray-300 text-center px-6 py-12 w-full">
+        {/* Footer Section */}
+        <motion.div
+          className="text-gray-300 text-center px-6 py-12 w-full"
+          initial={{ opacity: 0, y: 100 }}
+          animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 100 }}
+          transition={{ duration: 1, delay: 0.8 }}
+        >
           <h2 className="text-2xl font-bold text-white mb-4">Oseri du Goût</h2>
           <p className="text-sm max-w-2xl mx-auto mb-8">
             The perfect place to enjoy authentic fine dining with a modern twist.
@@ -86,9 +119,8 @@ export default function BookTable() {
               © 2025 Oseri du Goût. All rights reserved.
             </p>
           </div>
-        </div>
+        </motion.div>
       </div>
     </section>
   );
 }
-

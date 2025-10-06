@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { motion } from "framer-motion";
 import BookTable from "../components/BookTable";
 import Navbar from "../components/Navbar";
 import wineBg from "../assets/bg-wine2.jpg";
@@ -55,9 +56,7 @@ export default function WineList() {
     setConfirmed(false);
   };
 
-  const handlePlaceOrder = () => {
-    setConfirmed(true);
-  };
+  const handlePlaceOrder = () => setConfirmed(true);
 
   const totalCost = selectedWine ? selectedWine.price * Number(form.bottles || 1) : 0;
 
@@ -67,55 +66,76 @@ export default function WineList() {
       <Navbar variant="sticky" />
 
       {/* Hero Section */}
-      <section
+      <motion.section
+        initial={{ opacity: 0, y: 60 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 1.2, ease: "easeOut" }}
+        viewport={{ once: false, amount: 0.3 }}
         className="relative h-[80vh] flex items-center justify-center text-center bg-cover bg-center"
         style={{ backgroundImage: `url(${wineBg})` }}
       >
         <div className="absolute inset-0 bg-black/60"></div>
-        <div className="relative z-10 px-6">
+        <motion.div
+          initial={{ scale: 0.9, opacity: 0 }}
+          whileInView={{ scale: 1, opacity: 1 }}
+          transition={{ duration: 1, delay: 0.2 }}
+          viewport={{ once: false }}
+          className="relative z-10 px-6"
+        >
           <h1 className="text-4xl md:text-6xl font-bold text-[#bfa37c] mb-4 uppercase tracking-wide">
             Oldest Wine Collection in Paris
           </h1>
           <p className="text-gray-300 max-w-2xl mx-auto text-lg">
             Handpicked vintages and contemporary gems — curated for refined palates.
           </p>
-        </div>
-      </section>
+        </motion.div>
+      </motion.section>
 
       {/* Wine Grid */}
       <section className="py-20 px-6 md:px-12 lg:px-20 max-w-7xl mx-auto">
-        <h2 className="text-3xl md:text-4xl font-semibold text-center mb-14 text-white">
+        <motion.h2
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1 }}
+          viewport={{ once: false }}
+          className="text-3xl md:text-4xl font-semibold text-center mb-14 text-white"
+        >
           Explore Our Wine Selection
-        </h2>
+        </motion.h2>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-10">
-          {wines.map((wine) => (
-            <div
+          {wines.map((wine, index) => (
+            <motion.div
               key={wine.id}
-              className="bg-[#111] border border-gray-800 rounded-lg shadow-lg overflow-hidden flex flex-col hover:border-[#bfa37c] transition"
+              initial={{ opacity: 0, y: 50, rotateY: 10 }}
+              whileInView={{ opacity: 1, y: 0, rotateY: 0 }}
+              transition={{
+                duration: 0.7,
+                delay: index * 0.08,
+                ease: "easeOut",
+              }}
+              viewport={{ once: false }}
+              className="bg-[#111] border border-gray-800 rounded-lg shadow-lg overflow-hidden flex flex-col hover:border-[#bfa37c] transition hover:scale-[1.02]"
             >
-              {/* Wine Image */}
               <div className="w-full h-56 flex items-center justify-center bg-[#1a1a1a]">
-                <img
+                <motion.img
+                  whileHover={{ scale: 1.08, rotate: 2 }}
+                  transition={{ type: "spring", stiffness: 200 }}
                   src={wine.image}
                   alt={wine.name}
                   className="object-contain max-h-full"
                 />
               </div>
 
-              {/* Wine Details */}
               <div className="p-6 flex flex-col flex-1">
                 <h3 className="text-lg font-medium text-[#bfa37c] mb-2 uppercase tracking-wide">
                   {wine.name}
                 </h3>
-
                 <p className="italic text-gray-400">{wine.type}</p>
-
                 <p className="text-lg font-semibold mb-6 text-white">
                   ${wine.price}{" "}
                   <span className="text-gray-500 font-normal">/ Bottle</span>
                 </p>
-
                 <button
                   onClick={() => handleOrder(wine)}
                   className="mt-auto border border-[#bfa37c] px-6 py-3 text-sm uppercase tracking-wider text-[#bfa37c] hover:bg-[#bfa37c] hover:text-black transition"
@@ -123,26 +143,41 @@ export default function WineList() {
                   + Order Now
                 </button>
               </div>
-            </div>
+            </motion.div>
           ))}
         </div>
 
         {/* Back to Home */}
-        <div className="mt-16 text-center">
+        <motion.div
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1 }}
+          viewport={{ once: false }}
+          className="mt-16 text-center"
+        >
           <a
             href="/"
             className="border border-[#bfa37c] px-6 py-3 uppercase text-sm tracking-wider text-[#bfa37c] hover:bg-[#bfa37c] hover:text-black transition rounded"
           >
             ← Back to Home
           </a>
-        </div>
+        </motion.div>
       </section>
 
-      {/* Order Modal */}
+      {/* Modal */}
       {selectedWine && (
-        <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 px-6">
-          <div className="bg-[#111] text-white max-w-2xl w-full rounded-lg p-8 relative shadow-lg border border-[#bfa37c]">
-            {/* Close Button */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 px-6"
+        >
+          <motion.div
+            initial={{ scale: 0.8, opacity: 0, y: 40 }}
+            animate={{ scale: 1, opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="bg-[#111] text-white max-w-2xl w-full rounded-lg p-8 relative shadow-lg border border-[#bfa37c]"
+          >
             <button
               onClick={handleCloseModal}
               className="absolute top-4 right-4 text-gray-400 hover:text-white text-xl"
@@ -155,7 +190,6 @@ export default function WineList() {
                 <h2 className="text-2xl font-bold text-[#bfa37c] mb-6">
                   Order {selectedWine.name}
                 </h2>
-
                 <form className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <input
                     name="name"
@@ -183,12 +217,18 @@ export default function WineList() {
                     name="payment"
                     value={form.payment}
                     onChange={handleChange}
-                    className="bg-transparent border-b border-gray-600 focus:border-[#bfa37c] outline-none py-2"
+                    className="bg-transparent border-b border-gray-600 focus:border-[#bfa37c] outline-none py-2 text-white"
                   >
                     <option value="">Payment Method</option>
-                    <option value="card">Credit Card</option>
-                    <option value="paypal">PayPal</option>
-                    <option value="cash">Cash on Delivery</option>
+                    <option value="card" className="text-black">
+                      Credit Card
+                    </option>
+                    <option value="paypal" className="text-black">
+                      PayPal
+                    </option>
+                    <option value="cash" className="text-black">
+                      Cash on Delivery
+                    </option>
                   </select>
                   <input
                     name="bottles"
@@ -199,7 +239,6 @@ export default function WineList() {
                     className="bg-transparent border-b border-gray-600 focus:border-[#bfa37c] outline-none py-2"
                   />
 
-                  {/* Total */}
                   <div className="col-span-2 text-right">
                     <span className="text-gray-300">Total: </span>
                     <span className="ml-2 text-[#bfa37c] font-semibold">
@@ -218,7 +257,12 @@ export default function WineList() {
                 </div>
               </>
             ) : (
-              <div className="text-center">
+              <motion.div
+                initial={{ scale: 0.9, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                transition={{ duration: 0.5 }}
+                className="text-center"
+              >
                 <h2 className="text-2xl font-bold text-[#bfa37c] mb-4">
                   Order Confirmed !!!
                 </h2>
@@ -234,7 +278,6 @@ export default function WineList() {
                 <p className="mt-2 text-[#bfa37c] font-semibold">
                   Total Paid: ${totalCost}
                 </p>
-
                 <div className="mt-8">
                   <button
                     onClick={handleCloseModal}
@@ -243,14 +286,21 @@ export default function WineList() {
                     Close
                   </button>
                 </div>
-              </div>
+              </motion.div>
             )}
-          </div>
-        </div>
+          </motion.div>
+        </motion.div>
       )}
 
-      {/* Footer Section */}
-      <BookTable />
+      {/* Footer / BookTable Section */}
+      <motion.div
+        initial={{ opacity: 0, y: 80 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 1 }}
+        viewport={{ once: false }}
+      >
+        <BookTable />
+      </motion.div>
     </div>
   );
 }

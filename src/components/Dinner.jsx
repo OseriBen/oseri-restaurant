@@ -1,10 +1,19 @@
-import React from "react";
+import React, { useRef } from "react";
 import { Link } from "react-router-dom";
+import { motion, useInView } from "framer-motion";
 
 export default function Dinner() {
+  const sectionRef = useRef(null);
+  const isInView = useInView(sectionRef, { once: false, amount: 0.3 });
+
   return (
-    <section className="bg-[#111] text-white py-24 px-8">
-      <div className="max-w-6xl mx-auto text-center">
+    <section ref={sectionRef} className="bg-[#111] text-white py-24 px-8">
+      <motion.div
+        className="max-w-6xl mx-auto text-center"
+        initial={{ opacity: 0, y: 60 }}
+        animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 60 }}
+        transition={{ duration: 1, ease: "easeOut" }}
+      >
         {/* Section Title */}
         <h3
           className="text-4xl md:text-5xl font-bold underline decoration-orange-400 decoration-2 underline-offset-8 mb-16"
@@ -16,7 +25,11 @@ export default function Dinner() {
         {/* Two-Column Layout (Appetizers + Main Course) */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-16 text-left">
           {/* Appetizers */}
-          <div>
+          <motion.div
+            initial={{ opacity: 0, x: -60 }}
+            animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: -60 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+          >
             <h4
               className="text-2xl font-semibold mb-10 text-center md:text-left"
               style={{ fontFamily: "'Cinzel', serif" }}
@@ -56,10 +69,14 @@ export default function Dinner() {
                 Fresh mozzarella, tomatoes, basil, balsamic glaze.
               </p>
             </ul>
-          </div>
+          </motion.div>
 
           {/* Main Course */}
-          <div>
+          <motion.div
+            initial={{ opacity: 0, x: 60 }}
+            animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: 60 }}
+            transition={{ duration: 0.8, delay: 0.4 }}
+          >
             <h4
               className="text-2xl font-semibold mb-10 text-center md:text-left"
               style={{ fontFamily: "'Cinzel', serif" }}
@@ -99,19 +116,25 @@ export default function Dinner() {
                 Butter-poached lobster with lemon sauce.
               </p>
             </ul>
-          </div>
+          </motion.div>
         </div>
 
         {/* See More Button */}
-        <div className="mt-12 text-center">
+        <motion.div
+          className="mt-12 text-center"
+          initial={{ opacity: 0, y: 40 }}
+          animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 40 }}
+          transition={{ duration: 0.8, delay: 0.6 }}
+        >
           <Link
-            to="/menu" // navigates to MenuList page
+            to="/menu"
             className="px-8 py-3 bg-orange-500 hover:bg-orange-600 text-white rounded-lg transition"
           >
             See More
           </Link>
-        </div>
-      </div>
+        </motion.div>
+      </motion.div>
     </section>
   );
 }
+

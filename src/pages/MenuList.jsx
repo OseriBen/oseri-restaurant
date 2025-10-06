@@ -1,6 +1,7 @@
 // src/pages/MenuList.jsx
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import { motion } from "framer-motion";
 import Navbar from "../components/Navbar";
 import BookTable from "../components/BookTable";
 import menuBg from "../assets/bg-menu.jpg";
@@ -100,14 +101,23 @@ export default function MenuList() {
     setConfirmed(false);
   };
 
-  const handlePlaceOrder = () => {
-    setConfirmed(true);
-  };
+  const handlePlaceOrder = () => setConfirmed(true);
 
   const totalCost = selectedDish ? selectedDish.price * Number(form.qty || 1) : 0;
 
+  const fadeInUp = {
+    hidden: { opacity: 0, y: 60 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: "easeOut" } },
+  };
+
   const renderSection = (title, data) => (
-    <div className="max-w-7xl mx-auto px-6 py-20 flex-grow">
+    <motion.div
+      className="max-w-7xl mx-auto px-6 py-20 flex-grow"
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: false, amount: 0.2 }}
+      variants={fadeInUp}
+    >
       <h2
         className="text-3xl font-bold mb-10 text-center text-[#bfa37c]"
         style={{ fontFamily: "'Cinzel', serif" }}
@@ -115,21 +125,15 @@ export default function MenuList() {
         {title}
       </h2>
 
-      {/* Grid styled like WineList */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-10">
-        {data.map((dish) => (
-          <div
+        {data.map((dish, i) => (
+          <motion.div
             key={dish.id}
             className="bg-[#1a1a1a] rounded-lg shadow-lg overflow-hidden hover:scale-105 transition-transform cursor-pointer"
+            variants={fadeInUp}
+            transition={{ delay: i * 0.05 }}
           >
-            {/* Image fills card */}
-            <img
-              src={dish.image}
-              alt={dish.name}
-              className="w-full h-56 object-cover"
-            />
-
-            {/* Details */}
+            <img src={dish.image} alt={dish.name} className="w-full h-56 object-cover" />
             <div className="p-6">
               <h3
                 className="text-lg font-bold text-[#bfa37c] mb-2 uppercase tracking-wide"
@@ -149,24 +153,31 @@ export default function MenuList() {
                 + Order Now
               </button>
             </div>
-          </div>
+          </motion.div>
         ))}
       </div>
-    </div>
+    </motion.div>
   );
 
   return (
     <div className="bg-black min-h-screen text-white flex flex-col">
-      {/* Navbar */}
       <Navbar />
 
-      {/* Hero Section */}
-      <section
+      {/* Hero Section with fade-in motion */}
+      <motion.section
         className="relative h-[80vh] flex items-center justify-center bg-fixed bg-cover bg-center"
         style={{ backgroundImage: `url(${menuBg})` }}
+        initial={{ opacity: 0, scale: 1.05 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 1.2, ease: "easeOut" }}
       >
         <div className="absolute inset-0 bg-black/60"></div>
-        <div className="relative z-10 text-center px-6">
+        <motion.div
+          className="relative z-10 text-center px-6"
+          initial={{ y: 50, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ delay: 0.3, duration: 0.8 }}
+        >
           <h1
             className="text-5xl md:text-6xl font-bold drop-shadow-lg text-white"
             style={{ fontFamily: "'Cinzel', serif" }}
@@ -176,15 +187,14 @@ export default function MenuList() {
           <p className="mt-4 text-lg text-gray-300">
             Explore appetizers, mains, and desserts crafted with passion.
           </p>
-        </div>
-      </section>
+        </motion.div>
+      </motion.section>
 
-      {/* Sections */}
+      {/* Menu sections */}
       {renderSection("Appetizers", appetizers)}
       {renderSection("Main Dishes", mains)}
       {renderSection("Desserts", desserts)}
 
-      {/* Back to Home button */}
       <div className="text-center mb-12">
         <Link
           to="/"
@@ -194,10 +204,9 @@ export default function MenuList() {
         </Link>
       </div>
 
-      {/* Footer */}
       <BookTable />
 
-      {/* Modal */}
+      {/* Modal remains unchanged */}
       {selectedDish && (
         <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 px-4">
           <div className="bg-[#1a1a1a] border border-gray-700 p-10 rounded-lg w-full max-w-2xl relative text-white">
@@ -215,28 +224,12 @@ export default function MenuList() {
                 </h2>
 
                 <form className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <input
-                    name="name"
-                    placeholder="Name"
-                    value={form.name}
-                    onChange={handleChange}
-                    className="bg-transparent placeholder-gray-400 text-white border-b border-gray-600 focus:border-[#bfa37c] outline-none py-2"
-                  />
-                  <input
-                    name="email"
-                    type="email"
-                    placeholder="Email"
-                    value={form.email}
-                    onChange={handleChange}
-                    className="bg-transparent placeholder-gray-400 text-white border-b border-gray-600 focus:border-[#bfa37c] outline-none py-2"
-                  />
-                  <input
-                    name="phone"
-                    placeholder="Phone"
-                    value={form.phone}
-                    onChange={handleChange}
-                    className="bg-transparent placeholder-gray-400 text-white border-b border-gray-600 focus:border-[#bfa37c] outline-none py-2"
-                  />
+                  <input name="name" placeholder="Name" value={form.name} onChange={handleChange}
+                    className="bg-transparent placeholder-gray-400 text-white border-b border-gray-600 focus:border-[#bfa37c] outline-none py-2" />
+                  <input name="email" type="email" placeholder="Email" value={form.email} onChange={handleChange}
+                    className="bg-transparent placeholder-gray-400 text-white border-b border-gray-600 focus:border-[#bfa37c] outline-none py-2" />
+                  <input name="phone" placeholder="Phone" value={form.phone} onChange={handleChange}
+                    className="bg-transparent placeholder-gray-400 text-white border-b border-gray-600 focus:border-[#bfa37c] outline-none py-2" />
                   <select
                     name="payment"
                     value={form.payment}
@@ -258,9 +251,7 @@ export default function MenuList() {
                   />
                   <div className="flex items-center">
                     <span className="text-gray-300">Total: </span>
-                    <span className="ml-2 text-orange-300 font-semibold">
-                      ${totalCost}
-                    </span>
+                    <span className="ml-2 text-orange-300 font-semibold">${totalCost}</span>
                   </div>
                 </form>
 
@@ -275,20 +266,14 @@ export default function MenuList() {
               </>
             ) : (
               <div className="text-center">
-                <h2 className="text-2xl font-bold mb-4 text-[#bfa37c]">
-                  Order Confirmed !!!
-                </h2>
+                <h2 className="text-2xl font-bold mb-4 text-[#bfa37c]">Order Confirmed !!!</h2>
                 <p>
-                  Thank you{" "}
-                  <span className="font-semibold">{form.name || "Guest"}</span>,
-                  your order of <span className="font-semibold">{form.qty}</span>{" "}
+                  Thank you <span className="font-semibold">{form.name || "Guest"}</span>, your order of{" "}
+                  <span className="font-semibold">{form.qty}</span>{" "}
                   {form.qty > 1 ? "dishes" : "dish"} of{" "}
-                  <span className="font-semibold">{selectedDish.name}</span> has
-                  been placed.
+                  <span className="font-semibold">{selectedDish.name}</span> has been placed.
                 </p>
-                <p className="mt-2 text-orange-300 font-semibold">
-                  Total Paid: ${totalCost}
-                </p>
+                <p className="mt-2 text-orange-300 font-semibold">Total Paid: ${totalCost}</p>
 
                 <div className="mt-8">
                   <button

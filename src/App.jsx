@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 // Components
@@ -9,7 +9,8 @@ import ChefRecommend from "./components/ChefRecommend";
 import WineSection from "./components/WineSection";
 import Dinner from "./components/Dinner";
 import BookTable from "./components/BookTable";
-import ScrollToTop from "./components/ScrollToTop"; // ✅ added
+import ScrollToTop from "./components/ScrollToTop";
+import Loader from "./components/Loader"; 
 
 // Pages
 import WineList from "./pages/WineList";
@@ -50,9 +51,22 @@ function Home() {
 }
 
 function App() {
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const handleLoad = () => setLoading(false);
+
+    // Wait for all assets (images, videos, etc.) to load
+    window.addEventListener("load", handleLoad);
+
+    return () => window.removeEventListener("load", handleLoad);
+  }, []);
+
+  if (loading) return <Loader />; 
+
   return (
     <Router>
-      <ScrollToTop /> {/* ✅ always scrolls up on route change */}
+      <ScrollToTop />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/wines" element={<WineList />} />
